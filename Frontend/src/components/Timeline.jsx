@@ -83,20 +83,34 @@ export default function Timeline({ entries, handleDelete, setEntries }) {
     setEditText(entry.content);
   };
 
-  const handleEditSave = async () => {
-    try {
-      const res = await axios.put(`https://ai-journal-app.onrender.com/api/journal/edit/${editingEntry._id}`, {
-        content: editText,
-      });
-      setEntries((prev) =>
-        prev.map((e) => (e._id === editingEntry._id ? res.data : e))
-      );
-      setEditingEntry(null);
-      setEditText('');
-    } catch (err) {
-      console.error('Update failed:', err);
-    }
-  };
+ const handleEditSave = async () => {
+  if (!editingEntry || !editText.trim()) return;
+
+  try {
+    const token = localStorage.getItem('token');
+    const res = await axios.put(
+      `https://ai-journal-app.onrender.com/api/journal/edit/${editingEntry._id}`,
+      { content: editText },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    // Update entries
+    setEntries(prev =>
+      prev.map(e => (e._id === editingEntry._id ? res.data : e))
+    );
+
+    // Close dialog
+    setEditingEntry(null);
+    setEditText('');
+  } catch (err) {
+    console.error('Edit failed:', err);
+  }
+};
+
 
   return (
     <>
