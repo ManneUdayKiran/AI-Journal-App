@@ -28,7 +28,7 @@ export default function JournalPage() {
   const fetchEntries = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get('http://localhost:8000/api/journal/all', {
+      const response = await axios.get('https://ai-journal-app.onrender.com/api/journal/all', {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEntries(response.data);
@@ -42,7 +42,7 @@ export default function JournalPage() {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      await axios.delete(`http://localhost:8000/api/journal/delete/${id}`, {
+      await axios.delete(`https://ai-journal-app.onrender.com/api/journal/delete/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setEntries((prev) => prev.filter((e) => e._id !== id));
@@ -57,7 +57,7 @@ export default function JournalPage() {
     try {
       const token = localStorage.getItem('token');
       const res = await axios.post(
-        'http://localhost:8000/api/journal/create',
+        'https://ai-journal-app.onrender.com/api/journal/create',
         { content: entry },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -126,9 +126,13 @@ export default function JournalPage() {
           <Button onClick={() => setOpen(false)} disabled={creating}>
             Cancel
           </Button>
-          <Button onClick={handleCreate} variant="contained" disabled={creating}>
-            {creating ? 'Saving...' : 'Save & Analyze'}
-          </Button>
+         <Button onClick={handleCreate} variant="contained" disabled={creating}>
+  {creating ? (
+    <CircularProgress size={20} color="inherit" />
+  ) : (
+    'Save & Analyze'
+  )}
+</Button>
         </DialogActions>
       </Dialog>
     </Container>

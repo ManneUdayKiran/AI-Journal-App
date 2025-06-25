@@ -25,7 +25,7 @@ export default function JournalEditor() {
     try {
       const token = localStorage.getItem('token'); // ✅ Get JWT token
       const res = await axios.post(
-        'http://localhost:8000/api/journal/create',
+        'https://ai-journal-app.onrender.com/api/journal/create',
         { content: entry },
         {
           headers: {

@@ -23,7 +23,7 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post('http://localhost:8000/api/auth/login', {
+      const res = await axios.post('https://ai-journal-app.onrender.com/api/auth/login', {
         email,
         password,
       });

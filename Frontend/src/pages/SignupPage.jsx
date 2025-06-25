@@ -23,7 +23,7 @@ export default function SignupPage() {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post('http://localhost:8000/api/auth/signup', {
+      const res = await axios.post('https://ai-journal-app.onrender.com/api/auth/signup', {
         email,
         password,
       });

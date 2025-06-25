@@ -85,7 +85,7 @@ export default function Timeline({ entries, handleDelete, setEntries }) {
 
   const handleEditSave = async () => {
     try {
-      const res = await axios.put(`http://localhost:8000/api/journal/edit/${editingEntry._id}`, {
+      const res = await axios.put(`https://ai-journal-app.onrender.com/api/journal/edit/${editingEntry._id}`, {
         content: editText,
       });
       setEntries((prev) =>

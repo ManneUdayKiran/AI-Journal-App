@@ -69,7 +69,7 @@ export default function Navbar() {
 
         {!isAuthenticated && (
           <Typography
-            onClick={() => navigate('/login')}
+            onClick={() => navigate('/')}
             sx={{ cursor: 'pointer' }}
           >
             Login
