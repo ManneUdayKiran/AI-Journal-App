@@ -84,20 +84,60 @@ router.get('/all', auth, async (req, res) => {
 });
 
 
-router.put('/edit/:id', auth, async (req, res) => {
+router.put('/edit/:id', async (req, res) => {
+  const { content } = req.body;
+
+  const prompt = `You are a JSON-only assistant.
+
+Analyze the following journal entry and respond in ONLY valid JSON format.
+
+Your response must include:
+- A detailed summary of the entry (about 5 to 6 lines).
+- A brief suggestion or advice to help the user feel better or improve their situation.
+- The mood detected from the entry (choose from: Happy, Sad, Angry, Stressed, Neutral).
+
+Respond strictly in this format:
+{
+  "summary": "...",
+  "suggestion": "...",
+  "mood": "Happy" // or Sad, Angry, Stressed, Neutral
+}
+
+Journal Entry: "${content}"`;
+
   try {
-    const updated = await JournalEntry.findOneAndUpdate(
-      { _id: req.params.id, user: req.user.id },
-      { content: req.body.content },
+    const response = await openai.chat.completions.create({
+      model: 'deepseek-r1-distill-llama-70b',
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.7,
+    });
+
+    const raw = response.choices[0].message.content.trim();
+    const match = raw.match(/\{[\s\S]*?\}/);
+    if (!match) return res.status(500).json({ error: 'No valid JSON found' });
+
+    const analysis = JSON.parse(match[0]);
+
+    const updated = await JournalEntry.findByIdAndUpdate(
+      req.params.id,
+      {
+        content,
+        summary: analysis.summary,
+        mood: analysis.mood,
+        suggestions: analysis.suggestions || '',
+      },
       { new: true }
     );
-    if (!updated) return res.status(404).json({ error: 'Entry not found or unauthorized' });
+
+    if (!updated) return res.status(404).json({ error: 'Entry not found' });
+
     res.status(200).json(updated);
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Update failed' });
   }
 });
+
 
 
 
