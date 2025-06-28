@@ -4,12 +4,6 @@ const JournalEntry = require('../models/JournalEntry.cjs');
 const { OpenAI } = require('openai');
 const auth = require('../middleware/auth.cjs'); // ✅ import middleware
 
-
-const openai = new OpenAI({
-  baseURL: "https://api.groq.com/openai/v1",
-  apiKey: process.env.GROQ_API_KEY,
-});
-
 router.post('/create', auth, async (req, res) => {
   try {
     const { content } = req.body;
@@ -44,6 +38,12 @@ Journal Entry: "${content}"`;
       console.error('❌ GROQ_API_KEY not found in environment variables');
       return res.status(500).json({ error: 'AI service configuration error' });
     }
+
+    // Initialize OpenAI client inside the route
+    const openai = new OpenAI({
+      baseURL: "https://api.groq.com/openai/v1",
+      apiKey: process.env.GROQ_API_KEY,
+    });
 
     const response = await openai.chat.completions.create({
       model: 'deepseek-r1-distill-llama-70b',
@@ -144,6 +144,18 @@ Respond strictly in this format:
 Journal Entry: "${content}"`;
 
   try {
+    // Check if API key is available
+    if (!process.env.GROQ_API_KEY) {
+      console.error('❌ GROQ_API_KEY not found in environment variables');
+      return res.status(500).json({ error: 'AI service configuration error' });
+    }
+
+    // Initialize OpenAI client inside the route
+    const openai = new OpenAI({
+      baseURL: "https://api.groq.com/openai/v1",
+      apiKey: process.env.GROQ_API_KEY,
+    });
+
     const response = await openai.chat.completions.create({
       model: 'deepseek-r1-distill-llama-70b',
       messages: [{ role: 'user', content: prompt }],
