@@ -40,7 +40,7 @@ An intelligent journaling app powered by LLMs that allows users to record daily 
 
 * **Frontend:** React.js, MUI, Axios, React Router
 * **Backend:** Node.js, Express.js, MongoDB
-* **AI API:** Groq's `deepseek-r1-distill-llama-70b` model (OpenAI-compatible)
+* **AI API:** Groq's `openai` model (OpenAI-compatible)
 * **Auth:** JWT token-based login/signup
 
 ## 🏗️ Setup Instructions

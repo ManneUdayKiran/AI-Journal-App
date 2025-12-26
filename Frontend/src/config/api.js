@@ -3,7 +3,7 @@
 
 const API_CONFIG = {
   // Set to 'local' for development, 'production' for deployed backend
-  environment: "local",
+  environment: "production",
 
   endpoints: {
     local: "http://localhost:8000/api",
