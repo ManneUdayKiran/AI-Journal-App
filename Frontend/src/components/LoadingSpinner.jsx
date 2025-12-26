@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
 

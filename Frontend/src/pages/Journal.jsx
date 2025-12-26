@@ -58,6 +58,7 @@ export default function JournalPage() {
     setSnackbar({ open: true, message, severity: "error" });
   };
 
+  // eslint-disable-next-line no-unused-vars
   const showSuccess = (message) => {
     setSnackbar({ open: true, message, severity: "success" });
   };
